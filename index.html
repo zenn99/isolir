@@ -126,7 +126,6 @@
     </div>
 
     <script>
-        // MENGGUNAKAN DATA SUPABASE BARU BOS
         var SUPABASE_URL = 'https://vljvulbjxhuysesronog.supabase.co';
         var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsanZ1bGJqeGh1eXNlc3Jvbm9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwMjgyOTcsImV4cCI6MjEwMjYwNDI5N30.yPq1kySc9iPuOdS_eCWGRc60gUoklNqc2YRLQ7ILCIk';
         if (typeof window.supabaseClient === 'undefined') { window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
@@ -165,7 +164,7 @@
                     customer_code: "NET-" + Math.floor(100000 + Math.random() * 900000),
                     name: document.getElementById('cust-name').value,
                     phone: document.getElementById('cust-phone').value,
-                    package_name: document.getElementById('cust-package').value,
+                    packname: document.getElementById('cust-package').value, // <--- SUDAH DISESUAIKAN JADI packname
                     package_price: parseInt(document.getElementById('cust-price').value),
                     pppoe_username: document.getElementById('cust-user').value,
                     pppoe_password: document.getElementById('cust-pass').value,
@@ -181,21 +180,19 @@
             finally { btnSave.disabled = false; }
         });
 
-        async function setStatusIsolir(customerId, pppoeUser, makeIsolated, pkgName) {
+        async function setStatusIsolir(customerId, pppoeUser, makeIsolated) {
             var actionText = makeIsolated ? 'ISOLATED' : 'NORMAL';
             if (!confirm(`Yakin ingin mengubah status pelanggan ini menjadi ${actionText}?`)) return;
 
             try {
                 alert("Sedang menghubungi MikroTik bos... Mohon tunggu.");
                 
-                // MENGGUNAKAN URL EDGE FUNCTION BARU
                 const response = await fetch(SUPABASE_URL + '/functions/v1/mikrotik', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
                     body: JSON.stringify({
                         pppoe_username: pppoeUser,
-                        action: actionText,
-                        package_name: pkgName
+                        action: actionText
                     })
                 });
                 const resultMikrotik = await response.json();
@@ -238,16 +235,17 @@
                     var statusTextDisplay = isIsolated ? 'ISOLATED' : 'NORMAL';
                     
                     var actionButton = isIsolated 
-                        ? `<button onclick="setStatusIsolir('${cust.id}', '${cust.pppoe_username}', false, '${cust.package_name}')" class="btn-buka">BUKA ISOLIR</button>`
-                        : `<button onclick="setStatusIsolir('${cust.id}', '${cust.pppoe_username}', true, '${cust.package_name}')" class="btn-isolir">ISOLIR</button>`;
+                        ? `<button onclick="setStatusIsolir('${cust.id}', '${cust.pppoe_username}', false)" class="btn-buka">BUKA ISOLIR</button>`
+                        : `<button onclick="setStatusIsolir('${cust.id}', '${cust.pppoe_username}', true)" class="btn-isolir">ISOLIR</button>`;
 
                     var deleteButton = `<button onclick="hapusPelanggan('${cust.id}', '${cust.name}')" class="btn-hapus">HAPUS</button>`;
 
+                    // Menampilkan packname sesuai nama kolom baru
                     list.innerHTML += `
                         <div class="customer-card">
                             <div>
                                 <h4 style="margin-bottom: 4px; font-size:15px;">${cust.name}</h4>
-                                <small style="color: gray;">${cust.customer_code} | Paket: ${cust.package_name} | PPPoE: ${cust.pppoe_username}</small><br>
+                                <small style="color: gray;">${cust.customer_code} | Paket: ${cust.packname || '-'} | PPPoE: ${cust.pppoe_username}</small><br>
                                 <small style="color: ${statusColor}; font-weight: bold;">● ${statusTextDisplay}</small>
                             </div>
                             <div class="btn-group">
