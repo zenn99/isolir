@@ -1,0 +1,67 @@
+:root {
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --primary: #10b981; /* Green modern */
+    --primary-dark: #059669;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; }
+
+/* Screen Management */
+.screen { display: none; height: 100vh; width: 100vw; overflow: hidden; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* Login Box */
+.login-box { margin: auto; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: var(--shadow); width: 90%; max-width: 400px; text-align: center; }
+.logo { font-weight: 800; font-size: 28px; }
+.logo span { color: var(--primary); }
+.subtitle { color: var(--text-muted); margin-bottom: 20px; font-size: 14px; }
+.login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+.btn-primary { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; }
+.btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
+.footer-text { margin-top: 20px; font-size: 12px; color: var(--text-muted); }
+
+/* App Header */
+.app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--card-bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.app-header h2 { font-size: 18px; font-weight: 600; }
+.user-avatar { background: var(--danger); color: white; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+/* Main Content */
+.app-content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; }
+.view { display: none; }
+.view.active { display: block; }
+
+/* Dashboard Grid */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-card { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.stat-label { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 5px; }
+.stat-card h3 { font-size: 24px; font-weight: 700; }
+.stat-card.success h3 { color: var(--primary); }
+.stat-card.warning h3 { color: var(--warning); }
+.stat-card.danger h3 { color: var(--danger); }
+
+/* Bottom Nav */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0; padding-bottom: env(safe-area-inset-bottom, 10px); }
+.nav-item { background: none; border: none; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 11px; font-weight: 500; cursor: pointer; }
+.nav-item.active { color: var(--primary); }
+.nav-item .icon { font-size: 20px; margin-bottom: 4px; }
+
+/* Modals & Toast */
+.modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
+.modal.active { display: flex; }
+.bottom-sheet { background: var(--card-bg); width: 100%; border-radius: 16px 16px 0 0; padding: 20px; animation: slideUp 0.3s ease-out; }
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 1000; }
+
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* Cards & Forms */
+.action-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+.action-bar input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
+.customer-card { background: var(--card-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;}
